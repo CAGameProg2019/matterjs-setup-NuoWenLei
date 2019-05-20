@@ -5,6 +5,7 @@ let Engine = Matter.Engine,
     Render = Matter.Render,
     World = Matter.World,
     Bodies = Matter.Bodies,
+    Detector = Matter.Detector,
     Constraint = Matter.Constraint,
     Composites = Matter.Composites;
 let engine = Engine.create();
@@ -26,12 +27,12 @@ let mpos = {
     y:0
 };
 let circle1 = {
-    x: 200,
+    x: 500,
     y: 50
 };
 let circle2 = {
-    x: 200,
-    y:80
+    x: 100,
+    y:400
 };
 let circle3 = {
     x: 200,
@@ -63,110 +64,53 @@ let newWallHappened = false;
 // }
 let ball=Bodies.circle(window.innerWidth/2+50, 300, 40);
 let ball1 = Bodies.circle(circle1.x, circle1.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball2 = Bodies.circle(circle2.x, circle2.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball3 = Bodies.circle(circle3.x, circle3.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball4 = Bodies.circle(circle4.x, circle4.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball5 = Bodies.circle(circle5.x, circle5.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball6 = Bodies.circle(circle6.x, circle6.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
-let ball7 = Bodies.circle(circle7.x, circle7.y, 40, {render: {
-    fillStyle: '#18181D',
-    strokeStyle: '#18181D'
-}});
+    fillStyle: 'blue'
+}, density: 2});
+let ball2 = Bodies.rectangle(circle2.x, circle2.y, 40, 40);
+// let ball3 = Bodies.rectangle(circle3.x, circle3.y, 40, 40);
+// let ball4 = Bodies.rectangle(circle4.x, circle4.y, 40, 40);
+// let ball5 = Bodies.rectangle(circle5.x, circle5.y, 40, 40);
+// let ball6 = Bodies.rectangle(circle6.x, circle6.y, 40, 40);
+// let ball7 = Bodies.rectangle(circle7.x, circle7.y, 40, 40);
 // let floor=Bodies.trapezoid(window.innerWidth/2+100,window.innerHeight-100,window.innerWidth,100,.9,{isStatic: true});
 let softBody =Composites.softBody(400, 30, 10, 10, 10, 10, true, 20);
 let myCradle=Composites.newtonsCradle(600, 100, 8, 10, 160);
-let rectangle = Bodies.rectangle(50, 50, 50, 50);
+let rectangle = Bodies.rectangle(window.innerWidth/4, window.innerHeight*3/4, 500, 20, {density: 0.2});
 // let floor = Bodies.rectangle(window.innerWidth/2, window., innerHeight, window.innerWidth, 30, {isStatic: true});
 let ceiling = Bodies.rectangle(window.innerWidth/2, 0, window.innerWidth, 30, {isStatic: true});
 let leftWall = Bodies.trapezoid(300, window.innerHeight*7/8, 500, 300, 1, {isStatic: true});
 let rightWall = Bodies.trapezoid(window.innerWidth-300, window.innerHeight*7/8, 500, 300,1, {isStatic: true});
+let floor = Bodies.rectangle(window.innerWidth*3/4, window.innerHeight, window.innerWidth/2, 20, {isStatic: true});
+let floor1 = Bodies.trapezoid(0, window.innerHeight/6, 700, 100, 1, {isStatic: true});
+// let detector = Detector.canCollide(
+//     ball1,
+//     ball2
+// );
+
+// if(detector){
+//     ball1.render:
+//     {
+//         fillStyle: 'red'
+//     };
+// }
 // let anchorPoint1 = {x: circle1.x, y: circle1.y};
 // let anchorPoint2 = {x: circle2.x, y: circle2.y};
-let anchorPointA = {x: window.innerWidth/2, y: 50};
-let anchorPointB = {x: 50, y: window.innerHeight/2};
-let anchorPointC = {x: window.innerWidth-50, y: window.innerHeight/2};
-let anchor1 = Constraint.create({
+let anchorPointA = {x: window.innerWidth/4, y: window.innerHeight*3/4};
+
+let constraint = Constraint.create({
     pointA: anchorPointA,
-    bodyB: ball1,
-    stiffness: 0.7
+    bodyB: rectangle
+});
+function createTower(x, y) {
+    return Bodies.rectangle(x, y, 40, 40, {
+        density: 0.000001,
+        friction: .6
+    });
+}
 
-});
-let anchor = Constraint.create({
-    pointA: circle1,
-    pointB: circle2,
-    bodyA: ball1,
-    bodyB: ball2,
-    stiffness: 0.7,
-    render: {
-        fillStyle: '#18181D',
-        strokeStyle: '#18181D'
-    }
-});
-let anchor2 = Constraint.create({
-    pointA: circle2,
-    pointB: circle3,
-    bodyA: ball2,
-    bodyB: ball3,
-    stiffness: 0.7,
-    render: {
-        fillStyle: '#18181D',
-        strokeStyle: '#18181D'
-    }
-});
-let anchor3 = Constraint.create({
-    pointA: anchorPointB,
-    bodyB: ball4,
-    stiffness: 0.7
+let tower = Composites.stack(800, 395, 5, 4, 0, 0, createTower);
 
-});
-let anchor4 = Constraint.create({
-    pointA: circle4,
-    pointB: circle5,
-    bodyA: ball4,
-    bodyB: ball5,
-    render: {
-        fillStyle: '#18181D',
-        strokeStyle: '#18181D'
-    }
-});
-let anchor5 = Constraint.create({
-    pointA: anchorPointC,
-    bodyB: ball6,
-    stiffness: 0.7
-});
-let anchor6 = Constraint.create({
-    pointA: circle6,
-    pointB: circle7,
-    bodyA: ball6,
-    bodyB: ball7,
-    render: {
-        fillStyle: '#18181D',
-        strokeStyle: '#18181D'
-    }
-});
-// let wall = Bodies.circle(0, window.innerHeight-50, 200, {isStatic: true});
-// let wall1 = Bodies.circle(300, window.innerHeight-50, 200, {isStatic: true});
-// let wall2 = Bodies.circle(600, window.innerHeight-50, 200, {isStatic: true});
-
-World.add(engine.world, [ ceiling, ball1, ball2, ball3, ball4, ball5, ball6, ball7, anchor1, anchor, anchor2, anchor3, anchor4, anchor5, anchor6]);
+World.add(engine.world, [ ball1, constraint, rectangle, ball2, tower, floor]);
 
 let world = engine.world;
 let Mouse= Matter.Mouse;
@@ -204,5 +148,20 @@ window.addEventListener('keydown', function(event){
         newWallHappened = true;
         console.log(mpos);
     }
+    if(event.key == 'n'){
+        let newBall = Bodies.circle(circle1.x, circle1.y, 40, {render: {
+            fillStyle: 'blue'
+        }, density: 2});
+        World.add(engine.world, [newBall]);
+    }
+    if(event.key == 'm'){
+        let newRock= Bodies.rectangle(circle2.x, circle2.y, 40, 40);
+        World.add(engine.world, [newRock]);
+    }
+    if(event.key == 'b'){
+        Matter.Body.setAngle(rectangle, Math.PI);
+        Matter.Body.setVelocity(rectangle, {x: 0, y:0});
+        console.log('hi');
+    }
 
-})
+});
