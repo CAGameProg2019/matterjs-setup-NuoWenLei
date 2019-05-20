@@ -63,9 +63,9 @@ let newWallHappened = false;
 //     World.add(engine.world, [circle]);
 // }
 let ball=Bodies.circle(window.innerWidth/2+50, 300, 40);
-let ball1 = Bodies.circle(circle1.x, circle1.y, 40, {render: {
-    fillStyle: 'blue'
-}, density: 2});
+// let ball1 = Bodies.circle(circle1.x, circle1.y, 40, {render: {
+//     fillStyle: 'blue'
+// }, density: 2});
 let ball2 = Bodies.rectangle(circle2.x, circle2.y, 40, 40);
 // let ball3 = Bodies.rectangle(circle3.x, circle3.y, 40, 40);
 // let ball4 = Bodies.rectangle(circle4.x, circle4.y, 40, 40);
@@ -110,7 +110,7 @@ function createTower(x, y) {
 
 let tower = Composites.stack(800, 395, 5, 4, 0, 0, createTower);
 
-World.add(engine.world, [ ball1, constraint, rectangle, ball2, tower, floor]);
+World.add(engine.world, [constraint, rectangle, ball2, tower, floor]);
 
 let world = engine.world;
 let Mouse= Matter.Mouse;
