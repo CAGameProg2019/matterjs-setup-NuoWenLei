@@ -160,7 +160,7 @@ window.addEventListener('keydown', function(event){
     }
     if(event.key == 'b'){
         Matter.Body.setAngle(rectangle, Math.PI);
-        Matter.Body.setVelocity(rectangle, {x: 0, y:0});
+        Matter.Body.setAngularVelocity(rectangle, 0);
         console.log('hi');
     }
 
